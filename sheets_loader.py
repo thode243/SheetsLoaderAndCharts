@@ -1,7 +1,18 @@
 import os
-import json
+import requests
+import pandas as pd
 import gspread
-from google.oauth2.service_account import Credentials
+import os
+from time import sleep
+from datetime import datetime, date
+from datetime import time as dtime
+import pytz
+from oauth2client.service_account import ServiceAccountCredentials
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
+import logging
+import sys
+import uuid
 
 # --- Load Google credentials ---
 service_account_file = os.environ.get("GOOGLE_CREDENTIALS_PATH", "service_account.json")
