@@ -5,14 +5,18 @@ from google.oauth2.service_account import Credentials
 
 # --- Load Google credentials ---
 creds_info = None
-
-# Use service account file path from env
 service_account_file = os.environ.get("GOOGLE_CREDENTIALS_PATH", "service_account.json")
 if os.path.exists(service_account_file):
     with open(service_account_file) as f:
-        creds_info = json.load(f)
+        content = f.read()
+        print("JSON content:", content)  # Debug the JSON content
+        try:
+            creds_info = json.load(f)
+        except json.JSONDecodeError as e:
+            print(f"JSON decode error: {e}")
+            raise
 else:
-    raise RuntimeError("❌ No GOOGLE_CREDENTIALS_PATH file found")
+    raise RuntimeError(f"❌ No GOOGLE_CREDENTIALS_PATH file found at {service_account_file}")
 
 # --- Authenticate with Google Sheets ---
 creds = Credentials.from_service_account_info(
