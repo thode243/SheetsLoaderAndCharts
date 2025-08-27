@@ -19,10 +19,11 @@ jobs:
         run: |
           pip install --upgrade pip
           pip install gspread google-auth pandas matplotlib pytz
+          sudo apt-get install -y jq
 
       - name: Create service account file
         run: |
-          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > service_account.json
+          echo '${{ secrets.GOOGLE_CREDENTIALS_JSON }}' | jq . > service_account.json
 
       - name: Run Sheets Loader for Sheet 1
         env:
