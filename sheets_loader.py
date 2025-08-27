@@ -4,7 +4,6 @@ import gspread
 from google.oauth2.service_account import Credentials
 
 # --- Load Google credentials ---
-creds_info = None
 service_account_file = os.environ.get("GOOGLE_CREDENTIALS_PATH", "service_account.json")
 if os.path.exists(service_account_file):
     with open(service_account_file) as f:
