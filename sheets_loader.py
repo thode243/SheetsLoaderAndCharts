@@ -24,10 +24,10 @@ creds = Credentials.from_service_account_info(
 )
 gc = gspread.authorize(creds)
 
-# --- Get sheet ID only for loader ---
-sheet_id = os.environ.get("SHEET_ID2")
+# --- Get sheet ID for the new sheet ---
+sheet_id = os.environ.get("SHEET_ID_NEW")
 if not sheet_id:
-    raise RuntimeError("❌ SHEET_ID2 env variable not set")
+    raise RuntimeError("❌ SHEET_ID_NEW env variable not set")
 
 # Open spreadsheet and first worksheet
 sh = gc.open_by_key(sheet_id)
