@@ -8,47 +8,61 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
         run: |
           pip install --upgrade pip
           pip install gspread google-auth pandas pytz matplotlib
-
       - name: Create service account file
         run: |
           echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > service_account.json
-
       - name: Run Sheets Loader
         env:
           SHEET_ID2: ${{ secrets.SHEET_ID2 }}
           GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
         run: python sheets_loader.py
 
-  generate-charts:
+  sheets-loader-new:
     runs-on: ubuntu-latest
-    needs: sheets-loader
     steps:
       - uses: actions/checkout@v4
-
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-
       - name: Install dependencies
-        run: pip install gspread google-auth pandas matplotlib pytz
-
+        run: |
+          pip install --upgrade pip
+          pip install gspread google-auth pandas pytz matplotlib
       - name: Create service account file
         run: |
           echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > service_account.json
+      - name: Run New Sheets Loader
+        env:
+          SHEET_ID_NEW: ${{ secrets.SHEET_ID_NEW }}
+          GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
+        run: python sheets_loader_new.py
 
+  generate-charts:
+    runs-on: ubuntu-latest
+    needs: [sheets-loader, sheets-loader-new]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install gspread google-auth pandas matplotlib pytz
+      - name: Create service account file
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > service_account.json
       - name: Run Chart Generator
         env:
           SHEET_ID2: ${{ secrets.SHEET_ID2 }}
+          SHEET_ID_NEW: ${{ secrets.SHEET_ID_NEW }}
           GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
         run: python generate_charts.py
