@@ -32,7 +32,7 @@ jobs:
         env:
           GOOGLE_CREDENTIALS_JSON: ${{ secrets.GOOGLE_CREDENTIALS_JSON }}
 
-      - name: Run Sheets Loader for Sheet 1
+      - name: Run Sheets Loader for Sheet 2
         env:
           SHEET_ID2: ${{ secrets.SHEET_ID2 }}
           GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
