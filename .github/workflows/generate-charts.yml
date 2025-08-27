@@ -7,7 +7,8 @@ jobs:
   sheets-loader:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -26,11 +27,5 @@ jobs:
       - name: Run Sheets Loader for Sheet 1
         env:
           SHEET_ID2: ${{ secrets.SHEET_ID2 }}
-          GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
-        run: python sheets_loader.py
-
-      - name: Run Sheets Loader for Sheet 2
-        env:
-          SHEET_ID2: ${{ secrets.SHEET_ID_NEW }}
           GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
         run: python sheets_loader.py
