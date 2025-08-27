@@ -19,6 +19,10 @@ jobs:
           pip install --upgrade pip
           pip install gspread google-auth pandas pytz matplotlib
 
+      - name: Create service account file
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > service_account.json
+
       - name: Run Sheets Loader
         env:
           SHEET_ID2: ${{ secrets.SHEET_ID2 }}
@@ -38,6 +42,10 @@ jobs:
 
       - name: Install dependencies
         run: pip install gspread google-auth pandas matplotlib pytz
+
+      - name: Create service account file
+        run: |
+          echo "${{ secrets.GOOGLE_CREDENTIALS_JSON }}" > service_account.json
 
       - name: Run Chart Generator
         env:
