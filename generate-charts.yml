@@ -1,0 +1,46 @@
+name: Sheets Loader & Charts
+
+on:
+  workflow_dispatch:
+
+jobs:
+  sheets-loader:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install gspread google-auth pandas pytz matplotlib
+
+      - name: Run Sheets Loader
+        env:
+          SHEET_ID2: ${{ secrets.SHEET_ID2 }}
+          GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
+        run: python sheets_loader.py
+
+  generate-charts:
+    runs-on: ubuntu-latest
+    needs: sheets-loader
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install gspread google-auth pandas matplotlib pytz
+
+      - name: Run Chart Generator
+        env:
+          SHEET_ID2: ${{ secrets.SHEET_ID2 }}
+          GOOGLE_CREDENTIALS_PATH: ${{ github.workspace }}/service_account.json
+        run: python generate_charts.py
